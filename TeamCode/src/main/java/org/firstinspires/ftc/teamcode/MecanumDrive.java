@@ -37,8 +37,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.messages.DriveCommandMessage;
@@ -73,7 +75,7 @@ public final class MecanumDrive {
         public double kA = 0.0001;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 50;
+        public double maxWheelVel = 60;
         public double minProfileAccel = -30;
         public double maxProfileAccel = 50;
 
@@ -106,12 +108,15 @@ public final class MecanumDrive {
     public final AccelConstraint defaultAccelConstraint =
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
 
-    public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    public final DcMotorEx leftFront, leftBack, rightBack, rightFront, linearSlideTilt, leftSlide, rightSlide, specimenArm;
+
+    public Servo teleArm, claw, clawRotate, clawTilt, clawArm, specimenRotate, specimenClaw, specimenTilt, bucket, tiltStop;
 
     public final VoltageSensor voltageSensor;
 
     public final LazyImu lazyImu;
-
+    public RevBlinkinLedDriver LEDdriver;
+    public TouchSensor slideReset, tiltReset, specimenReset;
     public final Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
@@ -229,6 +234,25 @@ public final class MecanumDrive {
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        linearSlideTilt = hardwareMap.get(DcMotorEx.class, "linearSlideTilt");
+        leftSlide = hardwareMap.get(DcMotorEx.class, "leftSlide");
+        rightSlide = hardwareMap.get(DcMotorEx.class, "rightSlide");
+        specimenArm = hardwareMap.get(DcMotorEx.class, "specimenArm");
+
+        claw = hardwareMap.servo.get("claw");
+        clawRotate = hardwareMap.servo.get("clawRotate");
+        clawArm = hardwareMap.servo.get("clawArm");
+        clawTilt = hardwareMap.servo.get("clawTilt");
+        teleArm = hardwareMap.servo.get("teleArm");
+        specimenTilt = hardwareMap.servo.get("specimenTilt");
+        specimenRotate = hardwareMap.servo.get("specimenRotate");
+        specimenClaw = hardwareMap.servo.get("specimenClaw");
+        bucket = hardwareMap.servo.get("bucket");
+        tiltStop = hardwareMap.servo.get("tiltStop");
+        LEDdriver = hardwareMap.get(RevBlinkinLedDriver.class, "LEDdriver");
+        slideReset = hardwareMap.touchSensor.get("slideReset");
+        tiltReset = hardwareMap.touchSensor.get("tiltReset");
+        specimenReset = hardwareMap.touchSensor.get("specimenReset");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
