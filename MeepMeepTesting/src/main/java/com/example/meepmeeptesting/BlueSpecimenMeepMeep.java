@@ -16,8 +16,12 @@ public class BlueSpecimenMeepMeep {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-16, 63, Math.toRadians(-90)))
-                        .strafeTo(new Vector2d(3,36))
-                        .splineToLinearHeading(new Pose2d(-34,40, 0), Math.toRadians(180))
+                .strafeTo(new Vector2d(3,36))
+                .lineToY(38)
+                //.strafeTo(new Vector2d(-40,60))
+                        .splineToLinearHeading(new Pose2d(-30,30, Math.toRadians(250)), Math.toRadians(-90))
+                .strafeToLinearHeading(new Vector2d(-40,50), Math.toRadians(150))
+
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_OFFICIAL)

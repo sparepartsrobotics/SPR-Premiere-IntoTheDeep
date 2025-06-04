@@ -22,14 +22,25 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Autonomous(name = "SpecimenBlue", group = "Autonomous")
 public class SpecimenBlue extends LinearOpMode{
     public void runOpMode(){
-        Pose2d initialPose = new Pose2d(-16, 72, Math.toRadians(90));
+        Pose2d initialPose = new Pose2d(-16, 63, Math.toRadians(-90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-
+        BasketMethods bmethods = new BasketMethods(hardwareMap);
+        SpecimenMethods smethods = new SpecimenMethods(hardwareMap);
         waitForStart();
             if(isStopRequested()) return;
 
             Actions.runBlocking(
                     drive.actionBuilder(initialPose)
+                            .stopAndAdd(bmethods.initLinSlide())
+                            .stopAndAdd(smethods.liftSpecimenArm())
+                            .strafeTo(new Vector2d(3,36))
+                            .lineToY(38)
+                            //.strafeTo(new Vector2d(-40,60))
+                            .splineToLinearHeading(new Pose2d(-32,30, Math.toRadians(250)), Math.toRadians(-90))
+                            .stopAndAdd(smethods.specPush())
+                            .waitSeconds(1)
+                            .strafeToLinearHeading(new Vector2d(-40,50), Math.toRadians(150))
+
 
                             .build());
     }

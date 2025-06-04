@@ -110,7 +110,7 @@ public final class MecanumDrive {
 
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront, linearSlideTilt, leftSlide, rightSlide, specimenArm;
 
-    public Servo teleArm, claw, clawRotate, clawTilt, clawArm, specimenRotate, specimenClaw, specimenTilt, bucket, tiltStop;
+    public Servo teleArm, claw, clawRotate, clawTilt, clawArm, specimenRotate, specimenClaw, specimenTilt, bucket, tiltStop, specPush;
 
     public final VoltageSensor voltageSensor;
 
@@ -253,6 +253,7 @@ public final class MecanumDrive {
         slideReset = hardwareMap.touchSensor.get("slideReset");
         tiltReset = hardwareMap.touchSensor.get("tiltReset");
         specimenReset = hardwareMap.touchSensor.get("specimenReset");
+        specPush = hardwareMap.servo.get("specPush");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
