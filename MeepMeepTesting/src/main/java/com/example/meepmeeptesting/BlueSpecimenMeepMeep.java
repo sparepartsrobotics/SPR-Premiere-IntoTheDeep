@@ -19,8 +19,23 @@ public class BlueSpecimenMeepMeep {
                 .strafeTo(new Vector2d(3,36))
                 .lineToY(38)
                 //.strafeTo(new Vector2d(-40,60))
-                        .splineToLinearHeading(new Pose2d(-30,30, Math.toRadians(250)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-32,30, Math.toRadians(250)), Math.toRadians(-90))
+
                 .strafeToLinearHeading(new Vector2d(-40,50), Math.toRadians(150))
+
+                .strafeToLinearHeading(new Vector2d(-46, 30), Math.toRadians(250))
+
+                .strafeToLinearHeading(new Vector2d(-46,50), Math.toRadians(150))
+                .strafeToLinearHeading(new Vector2d(-54, 30), Math.toRadians(250))
+
+                .strafeToLinearHeading(new Vector2d(-54,50), Math.toRadians(150))
+                .strafeToLinearHeading(new Vector2d(-48,54), Math.toRadians(-90))
+                        .splineToConstantHeading(new Vector2d(7,42), Math.toRadians(-90))
+                        .strafeTo(new Vector2d(7,36))
+                        .strafeTo(new Vector2d(7,38))
+                        .setReversed(true)
+                        .splineToConstantHeading(new Vector2d(-40,45), Math.toRadians(90))
+                        .strafeTo(new Vector2d(-40,54))
 
                 .build());
 

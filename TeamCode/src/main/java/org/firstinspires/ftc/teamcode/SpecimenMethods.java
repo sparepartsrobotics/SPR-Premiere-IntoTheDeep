@@ -89,7 +89,7 @@ public class SpecimenMethods {
             specimenTilt.setPosition(1.0);
             specimenRotate.setPosition(0.0);
             specimenClaw.setPosition(0.2);
-            specimenArm.setTargetPosition(1025);
+            specimenArm.setTargetPosition(1100);
             specimenArm.setMode(RUN_TO_POSITION);
             specimenArm.setPower(.6);
             return false;
@@ -99,7 +99,7 @@ public class SpecimenMethods {
         @Override
 
         public boolean run(@NonNull TelemetryPacket packet){
-            specimenClaw.setPosition(.2);
+            specimenClaw.setPosition(clawClose);
             return false;
         }
     }
@@ -107,7 +107,7 @@ public class SpecimenMethods {
         @Override
 
         public boolean run(@NonNull TelemetryPacket packet){
-            specimenClaw.setPosition(clawClose);
+            specimenClaw.setPosition(clawOpen);
             return false;
         }
     }
@@ -125,7 +125,15 @@ public class SpecimenMethods {
         @Override
 
         public boolean run(@NonNull TelemetryPacket packet){
-            specPush.setPosition(.5);
+            specPush.setPosition(.25);
+            return false;
+        }
+    }
+    public class specPuCl implements Action{
+        @Override
+
+        public boolean run(@NonNull TelemetryPacket packet){
+            specPush.setPosition(0);
             return false;
         }
     }
@@ -145,5 +153,6 @@ public class SpecimenMethods {
         return new spec();
     }
     public Action specPush(){ return new specPu();}
+    public Action specPuClose(){ return new specPuCl();}
 
 }
