@@ -11,6 +11,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
@@ -80,56 +81,86 @@ public class SpecimenBlue extends LinearOpMode{
         drive.clawTilt.setPosition(clawTiltUp);
         drive.specimenTilt.setPosition(0.2);
         drive.teleArm.setPosition(1.0);
+        drive.specPush.setPosition(0);
+        TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
+                .afterTime(3.5, smethods.specPush())
+                .stopAndAdd(bmethods.initLinSlide())
+                .stopAndAdd(smethods.liftSpecimenArm())
+                .strafeTo(new Vector2d(0,29))
+                .stopAndAdd(smethods.openClaw())
+                .lineToY(50)
+                .strafeToLinearHeading(new Vector2d(-34,30), Math.toRadians(250))
+                .strafeToSplineHeading(new Vector2d(-40,49), Math.toRadians(150))
+                .stopAndAdd(smethods.specPuClose())
+                .strafeToLinearHeading(new Vector2d(-47, 30), Math.toRadians(260));
+        TrajectoryActionBuilder tab1x = drive.actionBuilder(new Pose2d(-48,30, Math.toRadians(250)))
+                .stopAndAdd(smethods.specPush())
+                .strafeToSplineHeading(new Vector2d(-48,50), Math.toRadians(150))
+                .stopAndAdd(smethods.specPuClose())
+                .strafeToLinearHeading(new Vector2d(-55,30), Math.toRadians(260))
+                .stopAndAdd(smethods.specPush())
+                .strafeToSplineHeading(new Vector2d(-55,49), Math.toRadians(150))
+                .stopAndAdd(smethods.specPuClose())
+                .stopAndAdd(smethods.pickupSpecimen())
+                .strafeToLinearHeading(new Vector2d(-35,49), Math.toRadians(-90))
+                .strafeTo(new Vector2d(-35,58));
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-48,57, Math.toRadians(-90)))
+                .stopAndAdd(smethods.closeClaw())
+                .waitSeconds(.1)
+                .stopAndAdd(smethods.liftSpecimenArm())
+                .strafeTo(new Vector2d(8,27))
+                .waitSeconds(.2)
+                .stopAndAdd(smethods.openClaw())
+                .strafeTo(new Vector2d(8,48))
+                .stopAndAdd(smethods.pickupSpecimen())
+                .strafeTo(new Vector2d(-35,45))
+                .strafeTo(new Vector2d(-35,56.5))
+                .stopAndAdd(smethods.closeClaw())
+                .waitSeconds(.1)
+                .stopAndAdd(smethods.liftSpecimenArm())
+                .strafeTo(new Vector2d(3,29))
+                .waitSeconds(.2)
+                .stopAndAdd(smethods.openClaw())
+                .strafeTo(new Vector2d(3,48));
+        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(6.5,48, Math.toRadians(-90)))
+                .stopAndAdd(smethods.pickupSpecimen())
+                .strafeTo(new Vector2d(-35,45))
+                .strafeTo(new Vector2d(-35,56.5))
+                .stopAndAdd(smethods.closeClaw())
+                .waitSeconds(.2)
+                .stopAndAdd(smethods.liftSpecimenArm())
+                .strafeTo(new Vector2d(5,29))
+                .waitSeconds(.2)
+                .stopAndAdd(smethods.openClaw())
+                .strafeTo(new Vector2d(5,48))
+                .strafeTo(new Vector2d(-45,54));
+
+//        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(4.5,48, Math.toRadians(-90)))
+//                .strafeTo(new Vector2d(-35,45))
+//                .stopAndAdd(smethods.pickupSpecimen())
+//                .strafeTo(new Vector2d(-35,56.5))
+//                .stopAndAdd(smethods.closeClaw())
+//                .waitSeconds(.2)
+//                .stopAndAdd(smethods.liftSpecimenArm())
+//                .strafeTo(new Vector2d(0,29))
+//                .stopAndAdd(smethods.openClaw())
+
+
+
+
         waitForStart();
             if(isStopRequested()) return;
 
             Actions.runBlocking(
-                    drive.actionBuilder(initialPose)
-                            .afterTime(4, smethods.specPush())
-                            .stopAndAdd(bmethods.initLinSlide())
-                            .stopAndAdd(smethods.liftSpecimenArm())
-                            .strafeTo(new Vector2d(0,31))
-                            .stopAndAdd(smethods.openClaw())
-                            .lineToY(50)
-                            .strafeToLinearHeading(new Vector2d(-34,30), Math.toRadians(250))
-                            .strafeToSplineHeading(new Vector2d(-40,50), Math.toRadians(150))
-                            .stopAndAdd(smethods.specPuClose())
-                            .strafeToLinearHeading(new Vector2d(-48, 30), Math.toRadians(250))
-                            .stopAndAdd(smethods.specPush())
-                            .strafeToSplineHeading(new Vector2d(-48,50), Math.toRadians(150))
-                            .stopAndAdd(smethods.pickupSpecimen())
-                            .stopAndAdd(smethods.specPuClose())
-                            .strafeToSplineHeading(new Vector2d(-55, 30), Math.toRadians(250))
-                            .stopAndAdd(smethods.specPush())
-                            .strafeToSplineHeading(new Vector2d(-55,50), Math.toRadians(150))
-                            .stopAndAdd(smethods.specPuClose())
-                            .strafeToSplineHeading(new Vector2d(-48,54), Math.toRadians(-90))
-                            .strafeTo(new Vector2d(-48,57))
-                            .stopAndAdd(smethods.closeClaw())
-                            .waitSeconds(.3)
-                            .stopAndAdd(smethods.liftSpecimenArm())
-                            .strafeTo(new Vector2d(3,34))
-                            .stopAndAdd(smethods.openClaw())
-                            .strafeTo(new Vector2d(3,48))
-                            .stopAndAdd(smethods.pickupSpecimen())
-                            .splineToConstantHeading(new Vector2d(-30,50), Math.toRadians(90))
-                            .strafeTo(new Vector2d(-30,56))
-                            .stopAndAdd(smethods.closeClaw())
-                            .waitSeconds(.3)
-                            .stopAndAdd(smethods.liftSpecimenArm())
-                            .strafeTo(new Vector2d(6,34))
-                            .stopAndAdd(smethods.openClaw())
-                            .strafeTo(new Vector2d(6,48))
-                            .stopAndAdd(smethods.pickupSpecimen())
-                            .splineToConstantHeading(new Vector2d(-30,50), Math.toRadians(90))
-                            .strafeTo(new Vector2d(-30,56))
-                            .stopAndAdd(smethods.closeClaw())
-                            .waitSeconds(.3)
-                            .stopAndAdd(smethods.liftSpecimenArm())
-                            .strafeTo(new Vector2d(9,34))
-                            .stopAndAdd(smethods.openClaw())
-                            .strafeTo(new Vector2d(9,48))
-                            .build());
+                    new SequentialAction(
+                            tab1.build(),
+                            tab1x.build(),
+                            tab2.build(),
+                            tab3.build()
+
+                    )
+
+            );
     }
 
 }

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import com.qualcomm.robotcore.hardware.TouchSensor;
 public class SpecimenMethods {
     public Servo clawArm;
     public Servo bucket;
@@ -20,6 +20,8 @@ public class SpecimenMethods {
     public Servo tiltStop;
 
     public Servo teleArm, specimenClaw, specimenRotate, specimenTilt, specPush;
+
+    public TouchSensor specimenReset;
 
     public double frMotorPower = 1.0;
     public double flMotorPower = 1.0;
@@ -68,6 +70,7 @@ public class SpecimenMethods {
         specimenRotate = hardwareMap.servo.get("specimenRotate");
         specimenClaw = hardwareMap.servo.get("specimenClaw");
         specPush = hardwareMap.servo.get("specPush");
+        specimenReset = hardwareMap.touchSensor.get("specimenReset");
     }
     public class liftSpec implements Action{
         @Override
@@ -89,7 +92,7 @@ public class SpecimenMethods {
             specimenTilt.setPosition(1.0);
             specimenRotate.setPosition(0.0);
             specimenClaw.setPosition(0.2);
-            specimenArm.setTargetPosition(1100);
+            specimenArm.setTargetPosition(1026);
             specimenArm.setMode(RUN_TO_POSITION);
             specimenArm.setPower(.6);
             return false;
@@ -125,7 +128,7 @@ public class SpecimenMethods {
         @Override
 
         public boolean run(@NonNull TelemetryPacket packet){
-            specPush.setPosition(.25);
+            specPush.setPosition(.28);
             return false;
         }
     }
