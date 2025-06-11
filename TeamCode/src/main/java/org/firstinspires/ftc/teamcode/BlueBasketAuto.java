@@ -119,7 +119,7 @@ public class BlueBasketAuto extends LinearOpMode{
                             .strafeToLinearHeading(new Vector2d(56,27), Math.toRadians(0))
                             .stopAndAdd(bmethods.bringClawArmDown2())
                             .waitSeconds(.8)
-                            .strafeToLinearHeading(new Vector2d(55, 55), Math.toRadians(-150))
+                            .strafeToLinearHeading(new Vector2d(54.5, 54.5), Math.toRadians(-150))
                             .stopAndAdd(bmethods.linSlideHighBasket())
                             .waitSeconds(1.3)
                             .stopAndAdd(bmethods.releaseSample())
