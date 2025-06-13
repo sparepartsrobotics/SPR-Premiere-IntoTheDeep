@@ -92,7 +92,7 @@ public class SpecimenMethods {
             specimenTilt.setPosition(1.0);
             specimenRotate.setPosition(0.0);
             specimenClaw.setPosition(0.2);
-            specimenArm.setTargetPosition(1022);
+            specimenArm.setTargetPosition(1026);
             specimenArm.setMode(RUN_TO_POSITION);
             specimenArm.setPower(.6);
             return false;

@@ -132,6 +132,7 @@ public class SprTeleOp extends LinearOpMode{
         srobot.clawTilt.setPosition(clawTiltUp);
         srobot.specimenTilt.setPosition(0.2);
         srobot.teleArm.setPosition(1.0);
+        srobot.specPush.setPosition(0);
     }
 
     public void lights() {
@@ -270,7 +271,7 @@ public class SprTeleOp extends LinearOpMode{
         //put on high chamber
         else if(gamepad2.y){
             /* New Position */
-            targetPos = -788; //255
+            targetPos = -765; //255
             srobot.specimenTilt.setPosition(0.5);
             srobot.specimenArm.setTargetPosition(targetPos);
             srobot.specimenArm.setMode(RUN_TO_POSITION);
@@ -469,7 +470,7 @@ public class SprTeleOp extends LinearOpMode{
         //check for extraneous values
         if (-25 < x && x < 25) {
             //x cannot be between -25 and 25
-             posX = 25;
+            posX = 25;
         }
         if (armLength + clawLength < Math.sqrt(posX * posX + posY * posY)) {
             //the longest it could reach is the length of the arm
@@ -484,11 +485,11 @@ public class SprTeleOp extends LinearOpMode{
         }
         //If angle is negative, find the co-terminal angle between 0 & 2 Pi radians
         /**if (clawAngle <= 0) {
-            clawAngle += 2 * Math.PI;
-        }*/
+         clawAngle += 2 * Math.PI;
+         }*/
         //if (armAngle <= 0) {
-       //     armAngle += 2 * Math.PI;
-       // }
+        //     armAngle += 2 * Math.PI;
+        // }
         clawAngle += (3 * Math.PI) / 4;
         armAngle += (3 * Math.PI) / 2;
         //Servos have 270 degrees of rotation, so divide by 3 Pi/2 to have correct ratio
