@@ -47,13 +47,19 @@ public class SprTeleOp extends LinearOpMode{
     public double clawArmUp = 0.38;//0.7;
     public double clawTiltUp = 0.28;//.3
     public double clawTiltMiddle = .675;
-    public double clawArmDownHigh = .8;
+    //Used to bring claw up when delivering samples to observation zone
+    public double clawArmDownHigh = 0.4;
+    //Used when claw is about to pick up samples in submersible
+    public double clawArmDownHover = 0.8;
+   //Used to pick up samples
+    public double clawArmDownLow = 0.93;
     public double clawTiltDown = 1;//.87
-    public double clawArmDownLow = .93;
+
     public double clawArmOut = 0.3;
     public int targetPos = 0; //2018;
 
     public int distanceToTarget = 0;
+
     public double clawOpen = 1.0;
 
     public double clawClose = 0;
@@ -77,6 +83,7 @@ public class SprTeleOp extends LinearOpMode{
             robotMovement();
             teleArm();
             openCloseClaw();
+            pushClawUp();
             pushClawDown();
             rotateClaw();
             outtake();
@@ -98,9 +105,11 @@ public class SprTeleOp extends LinearOpMode{
             } */
             telemetry.addData("time", time);
             //telemetry.addData("clawRotate", srobot.clawRotate.getPosition());
-            //telemetry.addData("leftSlide", srobot.leftSlide.getCurrentPosition());
-            //telemetry.addData("rightSlide", srobot.leftSlide.getCurrentPosition());
+            telemetry.addData("leftSlide", srobot.leftSlide.getCurrentPosition());
+            telemetry.addData("rightSlide", srobot.leftSlide.getCurrentPosition());
             telemetry.addData("slideTilt", srobot.linearSlideTilt.getCurrentPosition());
+            telemetry.addData("resetSlide", srobot.slideReset.isPressed());
+            telemetry.addData("resetTilt", srobot.tiltReset.isPressed());
             //telemetry.addData("clawArm", srobot.clawArm.getPosition());
             //telemetry.addData("clawTilt", srobot.clawTilt.getPosition());
             //telemetry.addData("clawAngle", angle1);
@@ -108,17 +117,28 @@ public class SprTeleOp extends LinearOpMode{
             telemetry.addData("Specimen Arm", srobot.specimenArm.getCurrentPosition());
             telemetry.addData("Specimen Reset", srobot.specimenReset.isPressed());
             //telemetry.addData("targetPos", targetPos);
-            //telemetry.addData("resetSlide", srobot.slideReset.isPressed());
-            //telemetry.addData("resetTilt", srobot.tiltReset.isPressed());
             //telemetry.addData("hi", yoWhatsGood);
             telemetry.update();
         }
 
     }
+    //sets all the default values at the beginning of TeleOp
     public void initRobot(){
         srobot.tiltStop.setPosition(1);
         srobot.specimenArm.setMode(STOP_AND_RESET_ENCODER);
         srobot.specimenArm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        //moves the tilt to the starting position
+        //REMEMBER tiltReset == true when not pressed
+        if (srobot.tiltReset.isPressed()) {
+            srobot.linearSlideTilt.setMode(RUN_USING_ENCODER);
+            srobot.linearSlideTilt.setPower(1);
+            while (opModeIsActive() && srobot.tiltReset.isPressed()) {
+                robotMovement();
+                telemetry.addData("resetTilt", srobot.tiltReset.isPressed());
+                telemetry.update();
+            }
+            srobot.linearSlideTilt.setPower(0);
+        }
         srobot.linearSlideTilt.setMode(STOP_AND_RESET_ENCODER);
         srobot.linearSlideTilt.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         srobot.leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -149,7 +169,7 @@ public class SprTeleOp extends LinearOpMode{
     }
     public void teleArm(){
         if (gamepad1.right_trigger > 0.0) {
-            srobot.clawArm.setPosition(clawArmDownHigh);
+            srobot.clawArm.setPosition(clawArmDownHover);
             srobot.clawTilt.setDirection(Servo.Direction.REVERSE);
             srobot.clawTilt.setPosition(clawTiltDown);
             telePosition -= inc;
@@ -196,6 +216,15 @@ public class SprTeleOp extends LinearOpMode{
             //srobot.teleArm.setPosition(telePosition);
         }
     }
+
+    public void pushClawUp() {
+        if (gamepad1.dpad_up) {
+            srobot.clawArm.setPosition(clawArmDownHigh);
+            srobot.clawTilt.setDirection(Servo.Direction.REVERSE);
+            srobot.clawTilt.setPosition(clawTiltDown);
+        }
+    }
+
     public void pushClawDown() {
         if (gamepad1.dpad_down) {
             if (srobot.clawRotate.getPosition() == 0.9) {
@@ -260,6 +289,7 @@ public class SprTeleOp extends LinearOpMode{
                 }
                 robotMovement();
                 teleArm();
+                pushClawUp();
                 pushClawDown();
                 rotateClaw();
                 openCloseClaw();
@@ -351,6 +381,7 @@ public class SprTeleOp extends LinearOpMode{
             while (opModeIsActive() && (srobot.slideReset.isPressed() || srobot.tiltReset.isPressed())) {
                 robotMovement();
                 teleArm();
+                pushClawUp();
                 pushClawDown();
                 rotateClaw();
                 openCloseClaw();
